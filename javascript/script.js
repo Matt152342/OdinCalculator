@@ -2,6 +2,10 @@ let number1 = '', number2 = '', operand = '';
 let calculation = '';
 
 // Other functions
+function backspace(string) {
+    return string.slice(0, -1);
+}
+
 function hover() {
     const buttons = document.querySelectorAll('.buttons .row .button');
 
@@ -16,15 +20,24 @@ function hover() {
     });
 }
 
-// Backspace functionality
-function backspace(string) {
-    return string.slice(0, -1);
+function operate(num1, num2, operand) {
+    num1 = parseFloat(num1);
+    num2 = parseFloat(num2);
+    switch(operand) {
+        case '+': 
+            return num1 + num2;
+        case '-':
+            return num1 - num2;
+        case '*':
+            return num1 * num2;
+        case '/':
+            return num1 / num2;
+    }
 }
 
 // Update variables
 function updateVariables() {
     let operandPressed = false;
-    let equalPressed = false;
 
     const buttons = document.querySelectorAll('.button');
     const displayEntered = document.querySelector('.entered');
@@ -36,6 +49,7 @@ function updateVariables() {
 
     buttons.forEach((button) => {
         button.addEventListener('click', () => {
+            // Handle digits
             if (classNumbers.some(element => button.classList.contains(element))) {
                 if (!operandPressed) {
                     number1 += button.textContent;
@@ -48,6 +62,7 @@ function updateVariables() {
                     displayEntered.textContent = number2;
                 }
             }
+            // Handle operands
             else if (classOperands.some(element => button.classList.contains(element))) {
                 if (number1 === '') {
                     alert('Please enter number before operand.');
@@ -65,6 +80,7 @@ function updateVariables() {
 
                 operandPressed = true;
             }
+            // Handle 'equal', 'period' and 'delete'
             else if (classSpecial.some(element => button.classList.contains(element))) {
                 if (button.classList.contains('equal')) {
                     if (number1 === '' || number2 === '' || operand === '') {
@@ -72,14 +88,12 @@ function updateVariables() {
                         return;
                     }
                     
-                    calculation += number2;
-                    number1 = Math.round(eval(calculation) * 100) / 100;
+                    number1 = Math.round(operate(number1, number2, operand) * 100) / 100;
                     number2 = '';
-                    calculation = number1;
+                    operandPressed = false;
+
                     displayEntered.textContent = number1;
                     displayCalculation.textContent = '';
-                    operandPressed = false;
-                    equalPressed = true;
                 }
                 else if (button.classList.contains('delete')) {
                     if (!operandPressed) {
