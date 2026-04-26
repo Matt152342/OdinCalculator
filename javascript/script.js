@@ -1,40 +1,6 @@
 let number1 = '', number2 = '', operand = '';
 let calculation = '';
 
-// Functions for operations logic
-function add(num1, num2) {
-    return num1 + num2;
-}
-
-function subtract(num1, num2) {
-    return num1 - num2;
-}
-
-function multiply(num1, num2) {
-    return num1 * num2;
-}
-
-function divide(num1, num2) {
-    return num1 / num2;
-}
-
-// Function for performing opereations
-function operate(num1, num2, operator) {
-    switch (operator) {
-        case '+':
-            add(num1, num2);
-        case '-':
-            subtract(num1, num2);
-        case '*':
-            multiply(num1, num2);
-        case '/':
-            divide(num1, num2);
-        default:
-            console.log("Unable to perform calculation");
-            return;
-    }
-}
-
 // Other functions
 function hover() {
     const buttons = document.querySelectorAll('.buttons .row .button');
@@ -48,6 +14,11 @@ function hover() {
             button.classList.toggle('hover');
         });
     });
+}
+
+// Backspace functionality
+function backspace(string) {
+    return string.slice(0, -1);
 }
 
 // Update variables
@@ -68,7 +39,7 @@ function updateVariables() {
             if (classNumbers.some(element => button.classList.contains(element))) {
                 if (!operandPressed) {
                     number1 += button.textContent;
-                    calculation = number1 + ' ';
+                    calculation = number1;
                     displayEntered.textContent = number1;
                 }
                 else if (operandPressed) {
@@ -82,27 +53,53 @@ function updateVariables() {
                     alert('Please enter number before operand.');
                     return;
                 }
-                else if (operandPressed === true) {
+                else if (operandPressed == true) {
                     alert('Operand already present');
                     return;
                 }
 
                 operand = button.textContent;
                 displayCalculation.textContent = calculation;
-                calculation += operand + ' ';
+                calculation += operand;
                 displayEntered.textContent = operand;
 
                 operandPressed = true;
             }
             else if (classSpecial.some(element => button.classList.contains(element))) {
-                if (button.classList.contains('equal') && operandPressed === true && number2 != '') {
+                if (button.classList.contains('equal')) {
+                    if (number1 === '' || number2 === '' || operand === '') {
+                        alert('Enter necessary number(s)/operand.');
+                        return;
+                    }
+                    
                     calculation += number2;
-                    number1 = eval(calculation);
+                    number1 = Math.round(eval(calculation) * 100) / 100;
                     number2 = '';
-                    calculation = number1 + ' ';
+                    calculation = number1;
                     displayEntered.textContent = number1;
                     displayCalculation.textContent = '';
                     operandPressed = false;
+                    equalPressed = true;
+                }
+                else if (button.classList.contains('delete')) {
+                    if (!operandPressed) {
+                        number1 = backspace(number1);
+                        calculation = number1;
+                        displayEntered.textContent = number1;
+                    }
+                    else {
+                        if (number2 === '') {
+                            operand = '';
+                            operandPressed = false;
+                            calculation = number1;
+                            displayEntered.textContent = number1;
+                            displayCalculation.textContent = '';
+                        }
+                        else {
+                            number2 = backspace(number2);
+                            displayEntered.textContent = number2;
+                        }
+                    }
                 }
             }
         });
