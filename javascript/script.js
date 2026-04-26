@@ -115,6 +115,15 @@ function updateVariables() {
                         }
                     }
                 }
+                else if (button.classList.contains('clear')) {
+                    number1 = '';
+                    number2 = '';
+                    operand = '';
+                    calculation = '';
+                    displayCalculation.textContent = '';
+                    displayEntered.textContent = '';
+                    operandPressed = false;
+                }
             }
         });
     });
