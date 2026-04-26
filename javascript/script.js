@@ -115,6 +115,7 @@ function updateVariables() {
                         }
                     }
                 }
+                // Handle clearing of data and variables
                 else if (button.classList.contains('clear')) {
                     number1 = '';
                     number2 = '';
@@ -123,6 +124,35 @@ function updateVariables() {
                     displayCalculation.textContent = '';
                     displayEntered.textContent = '';
                     operandPressed = false;
+                }
+                else if (button.classList.contains('period')) {
+                    if (!operandPressed) {
+                        if (!number1.includes('.')) {
+                            if (number1 === '') {
+                                number1 = '0.';
+                                displayEntered.textContent = number1;
+                            }
+                            else {
+                                number1 += '.';
+                                displayEntered.textContent = number1;
+                            }
+                        }
+                        else {
+                            alert('Period already present.');
+                        }
+                    }
+                    else {
+                        if (!number2.includes('.')) {
+                            if (number2 === '') {
+                                number2 = '0.';
+                                displayEntered.textContent = number2;
+                            }
+                            else {
+                                number2 += '.';
+                                displayEntered.textContent = number2;
+                            }
+                        }
+                    }
                 }
             }
         });
